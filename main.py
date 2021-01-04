@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = 'Jerry'
+import datetime
 from tkinter import *
 from seckill.seckill_taobao import ChromeDrive
 
@@ -26,12 +27,14 @@ def main():
 
     lbl = Label(win, text = "开抢时间：", width = 8, height = 2)
     lbl.grid(column = 0, row = 0)
-    txt = Entry(win, width = 18)
+    start_time = StringVar()
+    txt = Entry(win, textvariable = start_time, width = 18)
     txt.grid(column = 1, row = 0)
+    start_time.set(str(datetime.datetime.now()))
 
     lbl2 = Label(win, text = "支付密码：", width = 8, height = 2)
     lbl2.grid(column = 0, row = 1)
-    txt2 = Entry(win, width = 18)
+    txt2 = Entry(win, width = 18, show = '*')
     txt2.grid(column = 1, row = 1)
 
     b1 = Button(win, text = '开始', command = lambda: run_killer(txt, txt2))
@@ -65,6 +68,10 @@ def main():
     txt8 = Label(win, text = '6、本项目仅供交流学习使用，请勿用于其它任何商业用途')
     txt8.config(font = 'Helvetica -10 bold', fg = 'red')
     txt8.place(x = 10, y = 220)
+
+    txt9 = Label(win, text = '7、如果想手动付款，输入开抢时间后不用输入支付密码，直接点开始就可以了')
+    txt9.config(font = 'Helvetica -10 bold', fg = 'red')
+    txt9.place(x = 10, y = 240)
     win.mainloop()
 
 

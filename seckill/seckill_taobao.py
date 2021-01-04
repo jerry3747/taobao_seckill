@@ -174,15 +174,18 @@ class ChromeDrive:
 
             sleep(0.1)
         if submit_succ:
-            self.pay()
+            if self.password:
+                self.pay()
 
 
     def pay(self):
         try:
             element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'sixDigitPassword')))
             element.send_keys(self.password)
-            self.driver.find_element_by_id('J_authSubmit').click()
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'J_authSubmit'))).click()
+            print("付款成功")
         except:
             print('付款失败')
         finally:
+            sleep(60)
             self.driver.quit()
