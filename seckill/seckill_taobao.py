@@ -13,6 +13,7 @@ from selenium.common.exceptions import WebDriverException
 
 import seckill.settings as utils_settings
 from utils.utils import get_useragent_data
+from utils.utils import notify_user
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -183,9 +184,9 @@ class ChromeDrive:
             element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'sixDigitPassword')))
             element.send_keys(self.password)
             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'J_authSubmit'))).click()
-            print("付款成功")
+            notify_user(msg="付款成功")
         except:
-            print('付款失败')
+            notify_user(msg="付款失败")
         finally:
             sleep(60)
             self.driver.quit()
