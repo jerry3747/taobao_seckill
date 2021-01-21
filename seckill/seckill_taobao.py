@@ -3,6 +3,7 @@
 
 
 import os
+import json
 import platform
 from time import sleep
 from random import choice
@@ -37,7 +38,6 @@ def default_chrome_path():
             return os.path.abspath(os.path.join(driver_dir, "chromedriver"))
 
         raise Exception("The chromedriver drive path attribute is not found.")
-
 
 
 class ChromeDrive:
@@ -83,7 +83,7 @@ class ChromeDrive:
         chrome_options.add_argument(f'--user-agent={choice(get_useragent_data())}')
         return chrome_options
 
-    def _login(self, login_url: str="https://www.taobao.com"):
+    def login(self, login_url: str="https://www.taobao.com"):
         if login_url:
             self.driver = self.start_driver()
         else:
@@ -110,7 +110,7 @@ class ChromeDrive:
                 continue
 
     def keep_wait(self):
-        self._login()
+        self.login()
         print("等待到点抢购...")
         while True:
             current_time = datetime.now()
@@ -119,6 +119,7 @@ class ChromeDrive:
                 print("每分钟刷新一次界面，防止登录超时...")
                 sleep(60)
             else:
+                self.get_cookie()
                 print("抢购时间点将近，停止自动刷新，准备进入抢购阶段...")
                 break
 
@@ -189,3 +190,10 @@ class ChromeDrive:
         finally:
             sleep(60)
             self.driver.quit()
+
+
+    def get_cookie(self):
+        cookies = self.driver.get_cookies()
+        cookie_json = json.dumps(cookies)
+        with open('./cookies.txt', 'w', encoding = 'utf-8') as f:
+            f.write(cookie_json)
