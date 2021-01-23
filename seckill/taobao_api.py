@@ -7,6 +7,7 @@ import time
 import datetime
 import requests
 import urllib3
+import browsercookie
 from urllib.parse import *
 from seckill.seckill_taobao import ChromeDrive
 
@@ -14,6 +15,16 @@ urllib3.disable_warnings()
 
 session = requests.session()
 
+
+def get_cookies():
+    """
+    手动操作浏览器，用browsercookie获取浏览器cookie
+    :return:
+    """
+    ck = browsercookie.chrome()
+    for i in ck:
+        if 'taobao' in i.domain:
+            session.cookies.set(i.name, i.value)
 
 def get_buy_cart():
     """
@@ -147,8 +158,12 @@ def parse_submit_data(data):
     return new_data
 
 
-if __name__ == '__main__':
-    seckill_time = '2021-01-21 16:30:00'
+def run_with_selenium_cookie():
+    """
+    通过selenium模拟浏览器登陆，获取cookie并发送请求
+    :return:
+    """
+    seckill_time = '2021-01-23 15:05:00'
     seckill_time_obj = datetime.datetime.strptime(seckill_time, '%Y-%m-%d %H:%M:%S')
     ChromeDrive(seckill_time = seckill_time).keep_wait()
     with open('./cookies.txt', 'r', encoding = 'utf-8') as f:
@@ -171,3 +186,35 @@ if __name__ == '__main__':
                 submit_order(order_data, item_id, user_id)
                 break
         time.sleep(0.1)
+
+
+def run_with_browsercookie():
+    """
+    手动打开浏览器并登陆淘宝，然后用browsercookie获取淘宝页面的cookie，
+
+    :return:
+    """
+    seckill_time = '2021-01-23 16:40:00'
+    seckill_time_obj = datetime.datetime.strptime(seckill_time, '%Y-%m-%d %H:%M:%S')
+    get_cookies()
+    first_data, user_id = get_buy_cart()
+    while True:
+        current_time = datetime.datetime.now()
+        if (seckill_time_obj - current_time).seconds > 180:
+            print('等待中......')
+            time.sleep(60)
+        if current_time >= seckill_time_obj:
+            try:
+                cart_id, item_id, sku_id, seller_id, cart_params, attributes = parse_cart_data(first_data)
+            except TypeError as e:
+                print(e)
+                break
+            else:
+                order_data = confirm_order(cart_id, item_id, sku_id, seller_id, cart_params, attributes)
+                submit_order(order_data, item_id, user_id)
+                break
+
+
+if __name__ == '__main__':
+    run_with_browsercookie()
+    pass
