@@ -3,7 +3,7 @@
 ## 依赖
 ### 安装chrome浏览器，根据浏览器的版本找到对应的[chromedriver](http://npm.taobao.org/mirrors/chromedriver/)下载安装
 
-## web版本使用说明
+## web版使用说明
 1、抢购前需要校准本地时间，然后把需要抢购的商品加入购物车  
 2、如果要打包成可执行文件，可使用pyinstaller自行打包  
 3、不需要打包的，直接在项目根目录下 执行 python3 main.py  
