@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # encoding=utf-8
+import http
 import os
+
+import requests
 
 
 def get_useragent_data(filename: str="./useragents.txt") -> list:
@@ -13,3 +16,17 @@ def get_useragent_data(filename: str="./useragents.txt") -> list:
     except Exception:
         data = ["Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)"]
     return data
+
+
+def notify_user(msg: str):
+    print(msg)
+
+    token = os.getenv("TOKEN")
+    if not token:
+        return
+
+    rs = requests.post(url="https://sre24.com/api/v1/push", json=dict(
+        token=token,
+        msg=msg,
+    )).json()
+    assert rs["code"] == http.HTTPStatus.ACCEPTED, rs
