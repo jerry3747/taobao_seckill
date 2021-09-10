@@ -4,7 +4,7 @@ __author__ = 'Jerry'
 import datetime
 from tkinter import *
 from seckill.seckill_taobao import ChromeDrive
-
+import time
 
 
 def run_killer(txt, txt2):
@@ -30,7 +30,8 @@ def main():
     start_time = StringVar()
     txt = Entry(win, textvariable = start_time, width = 18)
     txt.grid(column = 1, row = 0)
-    start_time.set(str(datetime.datetime.now()))
+    # start_time.set(str(datetime.datetime.now()))#带时间戳的
+    start_time.set(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))#不带时间戳的  此处为修改的版本
 
     lbl2 = Label(win, text = "支付密码：", width = 8, height = 2)
     lbl2.grid(column = 0, row = 1)

@@ -64,7 +64,7 @@ class ChromeDrive:
         except WebDriverException:
             try:
                 driver = webdriver.Chrome(executable_path=self.chrome_path, chrome_options=self.build_chrome_options())
-
+                        #提示找不到驱动就去网上找自己版本的驱动，放自己的chromedriver文件位置   executable_path="/Users/nobb/code/taobao_seckill/chromedriver"
             except WebDriverException:
                 raise
         return driver
