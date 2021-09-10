@@ -4,7 +4,7 @@ __author__ = 'Jerry'
 import datetime
 from tkinter import *
 from seckill.seckill_taobao import ChromeDrive
-
+import time
 
 
 def run_killer(txt, txt2):
