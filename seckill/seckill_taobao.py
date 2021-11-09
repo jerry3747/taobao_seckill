@@ -26,36 +26,36 @@ from selenium.webdriver.support import expected_conditions as EC
 max_retry_count = 30
 
 
-def default_chrome_path():
-
-    driver_dir = getattr(utils_settings, "DRIVER_DIR", None)
-    if platform.system() == "Windows":
-        if driver_dir:
-            return os.path.abspath(os.path.join(driver_dir, "chromedriver.exe"))
-
-        raise Exception("The chromedriver drive path attribute is not found.")
-    else:
-        if driver_dir:
-            return os.path.abspath(os.path.join(driver_dir, "chromedriver"))
-
-        raise Exception("The chromedriver drive path attribute is not found.")
-
-
+from webdriver_manager.chrome import ChromeDriverManager
 class ChromeDrive:
 
-    def __init__(self, chrome_path=default_chrome_path(), seckill_time=None, password=None):
-        self.chrome_path = chrome_path
+    def __init__(self,seckill_time=None, password=None):
+        # self.chrome_path = chrome_path
         self.seckill_time = seckill_time
         self.seckill_time_obj = datetime.strptime(self.seckill_time, '%Y-%m-%d %H:%M:%S')
         self.password = password
 
+
     def start_driver(self):
+
         try:
             driver = self.find_chromedriver()
         except WebDriverException:
             print("Unable to find chromedriver, Please check the drive path.")
         else:
             return driver
+
+    def find_chromedriver(self):
+        try:
+            driver = webdriver.Chrome(ChromeDriverManager().install())
+
+        except WebDriverException:
+            try:
+                driver = webdriver.Chrome(executable_path=self.chrome_path, chrome_options=self.build_chrome_options())
+            except WebDriverException:
+                raise
+        return driver
+
 
     def find_chromedriver(self):
         try:
