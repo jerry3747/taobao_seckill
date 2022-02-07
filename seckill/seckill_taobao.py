@@ -165,6 +165,7 @@ class ChromeDrive:
                                     break
                                 else:
                                     print("提交订单失败...")
+                                    break
                             except Exception as e:
 
                                 print("没发现提交按钮, 页面未加载, 重试...")
